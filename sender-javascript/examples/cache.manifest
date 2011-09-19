@@ -1,0 +1,6 @@
+CACHE MANIFEST
+# Ver: 2
+CACHE:
+./flashprance.js
+./lib/bootstrap-1.0.0.min.css
+./lib/jquery-1.5.2.min.js
