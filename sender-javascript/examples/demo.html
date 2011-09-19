@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FlashPrance Demo</title>
+    <link rel="stylesheet" href="lib/bootstrap-1.0.0.min.css">
+    <script src="lib/jquery-1.5.2.min.js"></script>
+    <script src="../flashpance.js"></script>
+    <script>
+      FlashPrance.debug = true;
+
+      var flashPrance = new FlashPrance();
+
+      flashPrance.ontransmitstart = function() {
+        $('#cancel, #progressBar').show();
+        $('#transmit').attr('disabled', true);
+      };
+
+      flashPrance.ontransmitend = function() {
+        $('#cancel, #progressBar').hide();
+        $('#bar').css('width', '0%');
+        $('#transmit').removeAttr('disabled');
+      };
+
+      flashPrance.ontransmitvalue = function(value) {
+        $('#flasher').css('background-color', value ? '#000' : '#fff');
+      };
+
+      flashPrance.ontransmitprogress = function(progress) {
+        $('#bar').css('width', (progress * 100) + '%');
+      };
+
+      $(function() {
+
+        // If DOM storage is available, persist
+        // text box between page reloads.
+        if (window.localStorage) {
+          var savedText = localStorage['text'];
+          if (savedText) {
+            $('#data').val(savedText);
+          }
+          $('#data').bind('change keyup', function() {
+            localStorage['text'] = $('#data').val();
+          });
+        }
+
+        $('#transmit').click(function() {
+          flashPrance.transmitAscii($('#data').val());
+        });
+
+        $('#cancel, #flasher').click(function() {
+          flashPrance.abortTransmission();
+        });
+      });
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+        <h1>FlashPrance Demo</h1>
+      </div>
+
+      <p>Type some text. Hold device up to box. Hit transmit.</p>
+      <p>
+        <input id="data" type="text" class="input-mini" value="Hello" maxlength="100">
+        <button class="btn primary" id="transmit">Transmit</button>
+        <button class="btn" id="cancel" style="display:none">Cancel</button>
+      </p>
+
+      <div id="flasher" style="border: 1px dashed #666666; width: 100px; height: 100px">
+      </div>
+
+      <div id="progressBar" style="margin-top: 30px; width: 100px; height:
+          20px; border: 1px solid #000000; display:none">
+        <div id="bar" style="height: 100%; background-color: #0064CD"></div>
+      </div>
+
+    </div>
+
+  </body>
+</html>
