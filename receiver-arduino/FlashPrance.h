@@ -61,9 +61,9 @@ public:
   };
 
   FlashPrance(Callback* callback, int deltaThreshold = 1);
-  
+
   virtual void reset();
-  virtual void processSignal(unsigned long now, int value);
+  virtual void processSignal(micros_t now, int value);
 
 private:
 
@@ -73,8 +73,8 @@ private:
   virtual void processByte(micros_t now, int value);
 
   Callback* _callback;
- 
-  const int _deltaThreshold;  
+
+  const int _deltaThreshold;
   int _lastValue;
   bool _high;
 

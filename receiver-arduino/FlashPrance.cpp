@@ -6,7 +6,7 @@ micros_t timeDifference(micros_t start, micros_t end) {
   return end - start; // TODO: Handle clock rollover
 }
 
-FlashPrance::FlashPrance(Callback* callback, int deltaThreshold) 
+FlashPrance::FlashPrance(Callback* callback, int deltaThreshold)
     : _callback(callback), _deltaThreshold(deltaThreshold) {
   reset();
 }
@@ -20,7 +20,7 @@ void FlashPrance::reset() {
   _bufferCount = 0;
 }
 
-void FlashPrance::processSignal(unsigned long now, int value) {
+void FlashPrance::processSignal(micros_t now, int value) {
   int delta = value - _lastValue;
   if (_high) {
     if (-delta > _deltaThreshold) {
@@ -40,7 +40,7 @@ void FlashPrance::processSignal(unsigned long now, int value) {
 void FlashPrance::flipToHigh(micros_t now) {
   _callback->onSignalTransition(LOW_TO_HIGH);
   micros_t duration = timeDifference(_cycleStart, now);
-  
+
   float ratio = (float)_lastDuration / (float)duration;
 
   // TODO: Make these hardcoded values configurable
@@ -55,7 +55,7 @@ void FlashPrance::flipToHigh(micros_t now) {
   } else {
     processBit(now, TOO_LONG);
   }
-     
+
   _cycleStart = now;
 }
 
