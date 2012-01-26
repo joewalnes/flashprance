@@ -19,10 +19,13 @@
         $('#cancel, #progressBar').hide();
         $('#bar').css('width', '0%');
         $('#transmit').removeAttr('disabled');
+        $('#clock').css('background-color', '#fff');
+        $('#data').css('background-color', '#fff');
       };
 
-      flashPrance.ontransmitvalue = function(value) {
-        $('#flasher').css('background-color', value ? '#000' : '#fff');
+      flashPrance.ontransmitvalue = function(data, clock) {
+        $('#clock').css('background-color', clock ? '#000' : '#fff');
+        $('#data').css('background-color', data ? '#000' : '#fff');
       };
 
       flashPrance.ontransmitprogress = function(progress) {
@@ -36,20 +39,21 @@
         if (window.localStorage) {
           var savedText = localStorage['text'];
           if (savedText) {
-            $('#data').val(savedText);
+            $('#input').val(savedText);
           }
-          $('#data').bind('change keyup', function() {
-            localStorage['text'] = $('#data').val();
+          $('#input').bind('change keyup', function() {
+            localStorage['text'] = $('#input').val();
           });
         }
 
         $('#transmit').click(function() {
-          flashPrance.transmitAscii($('#data').val());
+          flashPrance.transmitAscii($('#input').val());
         });
 
         $('#cancel, #flasher').click(function() {
           flashPrance.abortTransmission();
         });
+
       });
     </script>
     <!-- iPhone tweaks -->
@@ -65,17 +69,19 @@
         <h1>FlashPrance Demo</h1>
       </div>
 
-      <p>Type some text. Hold device up to box. Hit transmit.</p>
+      <p>Type some text. Hold device up to outline. Hit transmit.</p>
       <p>
-        <input id="data" type="text" class="input-mini" value="Hello" maxlength="100">
+        <input id="input" type="text" class="input-mini" value="Hello" maxlength="100">
         <button class="btn primary" id="transmit">Transmit</button>
         <button class="btn" id="cancel" style="display:none">Cancel</button>
       </p>
 
-      <div id="flasher" style="border: 1px dashed #666666; width: 100px; height: 100px; margin-top: 40px;">
+      <div style="position: relative; border: 1px dashed #666666; width: 140px; height: 140px; margin-top: 40px; border-radius: 100%;">
+        <div id="data"  style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 20%; -border: 1px dashed #aaaaaa; border-radius: 100%;"></div>
+        <div id="clock" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 40%; -border: 1px dashed #aaaaaa; border-radius: 100%;"></div>
       </div>
 
-      <div id="progressBar" style="margin-top: 30px; width: 100px; height:
+      <div id="progressBar" style="margin-top: 30px; width: 140px; height:
           20px; border: 1px solid #000000; display:none">
         <div id="bar" style="height: 100%; background-color: #0064CD"></div>
       </div>
