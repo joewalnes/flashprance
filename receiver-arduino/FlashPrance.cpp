@@ -3,7 +3,12 @@
 #include "FlashPrance.h"
 
 micros_t timeDifference(micros_t start, micros_t end) {
-  return end - start; // TODO: Handle clock rollover
+  if (end < start) {
+    // Deal with clock rollover
+    return -(start - end);
+  } else {
+    return end - start;
+  }
 }
 
 FlashPrance::FlashPrance(Callback* callback, int deltaThreshold)
